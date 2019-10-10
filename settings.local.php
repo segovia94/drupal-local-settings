@@ -167,7 +167,7 @@ $settings['skip_permissions_hardening'] = TRUE;
  * example.org, with all subdomains included.
  */
  $settings['trusted_host_patterns'] = [
-  '*',
+  '.*',
   '^lndo\.site$',
   '^.+\.lndo\.site$',
  ];
