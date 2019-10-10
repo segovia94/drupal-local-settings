@@ -187,11 +187,20 @@ $settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd2LqxIII5mh9
 # $config['system.mail']['interface']['default'] = 'devel_mail_log';
 
 /**
- * Configuration Sync directory - Edit this as needed
- * Look in the /sites/default/files directory for a directory with a long hash like:
- * config_f522e50bd94f2207e3dc21e94388ac59ca5015a7 and edit the [replace-with-HASH] below.
+ * Location of the site configuration files.
+ *
+ * The $settings['config_sync_directory'] specifies the location of file system
+ * directory used for syncing configuration data. On install, the directory is
+ * created. This is used for configuration imports.
+ *
+ * The default location for this directory is inside a randomly-named
+ * directory in the public files path. The setting below allows you to set
+ * its location.
+ *
+ * https://www.drupal.org/docs/8/configuration-management/changing-the-storage-location-of-the-sync-directory
  */
-# $config_directories['sync'] = 'sites/default/files/config_[replace-with-HASH]/sync';
+$config_directories[CONFIG_SYNC_DIRECTORY] = 'sites/default/files/sync';
+
 
 /**
  * Database settings - Edit these as needed
