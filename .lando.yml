@@ -8,9 +8,9 @@ tooling:
     description: Setup Drupal for with local config.
     cmd:
       # 'cd' is throwing errors so for now we will copy each file to the full directory path.
-      - "FILE=$LANDO_WEBROOT/sites/default/services.local.yml && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/services.local.yml || echo '$FILE already exist'"
-      - "FILE=$LANDO_WEBROOT/sites/default/settings.local.php && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.local.php || echo '$FILE already exist'"
-      - "FILE=$LANDO_WEBROOT/sites/default/settings.php && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.php || echo '$FILE already exist'"
+      - FILE=$LANDO_WEBROOT/sites/default/services.local.yml && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/services.local.yml || echo '$FILE already exist'
+      - FILE=$LANDO_WEBROOT/sites/default/settings.local.php && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.local.php || echo '$FILE already exist'
+      - FILE=$LANDO_WEBROOT/sites/default/settings.php && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.php || echo "\\\nif \(file_exists\(\$app_root . \'/\' . \$site_path . \'/settings.local.php\'\)\) { \\\n include \$app_root . \'/\' . \$site_path . \'settings.local.php\'\;\\\n}" >> $FILE
       - "echo 'Your local Drupal config is setup'"
     user: root
   xdebug-on:
