@@ -199,7 +199,10 @@ $settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd2LqxIII5mh9
  *
  * https://www.drupal.org/docs/8/configuration-management/changing-the-storage-location-of-the-sync-directory
  */
-$config_directories[CONFIG_SYNC_DIRECTORY] = 'sites/default/files/sync';
+# Inside Drupal
+# $config_directories[CONFIG_SYNC_DIRECTORY] = 'sites/default/files/sync';
+# Outside Drupal
+# $config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
 
 
 /**
