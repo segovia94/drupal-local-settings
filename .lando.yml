@@ -13,6 +13,12 @@ tooling:
       - FILE=$LANDO_WEBROOT/sites/default/settings.php && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.php || echo "\\\nif \(file_exists\(\$app_root . \'/\' . \$site_path . \'/settings.local.php\'\)\) { \\\n include \$app_root . \'/\' . \$site_path . \'/settings.local.php\'\;\\\n}" >> $FILE
       - "echo 'Your local Drupal config is setup'"
     user: root
+  drupal-install:
+    service: appserver
+    description: Install Drupal
+    cmd:
+      - APP=$LANDO_APP_NAME && drush si standard --account-pass=admin --account-name=admin --site-name=$APP
+      - URI=http://$LANDO_APP_NAME.$LANDO_DOMAIN && drush uli --uri=$URI
   xdebug-on:
     service: appserver
     description: Enable xdebug for apache.
