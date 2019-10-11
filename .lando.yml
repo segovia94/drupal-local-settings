@@ -1,0 +1,25 @@
+name: # Put the custom name of your site here
+recipe: drupal8
+config:
+  webroot: web
+tooling:
+  drupal-setup:
+    service: appserver
+    description: Setup Drupal for with local config.
+    cmd:
+      # 'cd' is throwing errors so for now we will copy each file to the full directory path.
+      - "FILE=$LANDO_WEBROOT/sites/default/services.local.yml && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/services.local.yml || echo '$FILE already exist'"
+      - "FILE=$LANDO_WEBROOT/sites/default/settings.local.php && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.local.php || echo '$FILE already exist'"
+      - "FILE=$LANDO_WEBROOT/sites/default/settings.php && [ ! -f $FILE ] && wget -O $FILE https://raw.githubusercontent.com/segovia94/drupal-local-settings/master/settings.php || echo '$FILE already exist'"
+      - "echo 'Your local Drupal config is setup'"
+    user: root
+  xdebug-on:
+    service: appserver
+    description: Enable xdebug for apache.
+    cmd: "docker-php-ext-enable xdebug && /etc/init.d/apache2 reload"
+    user: root
+  xdebug-off:
+    service: appserver
+    description: Disable xdebug for apache.
+    cmd: "rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload"
+    user: root
