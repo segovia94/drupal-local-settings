@@ -11,3 +11,8 @@ These files are meant to be pulled out individually. The Lando file is all that 
 4. Run `lando drupal-local-settings`. This will pull in the local settings files into your site.
 
 5. Install a fresh site with `lando drupal-install`.
+
+## Drupal Contrib and Testing
+
+If working on contrib modules or Drupal core, this Lando setup might be better.
+[https://gist.github.com/segovia94/271dee02a907e57e0c3559e83dbb7783]
