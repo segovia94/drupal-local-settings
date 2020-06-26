@@ -175,10 +175,21 @@ $settings['skip_permissions_hardening'] = TRUE;
 /**
  * Salt for one-time login links, cancel links, form tokens, etc.
  *
- * This variable is normally set to a random value by the installer. All
- * one-time login links will be invalidated if the value is changed.
+ * This variable will be set to a random value by the installer. All one-time
+ * login links will be invalidated if the value is changed. Note that if your
+ * site is deployed on a cluster of web servers, you must ensure that this
+ * variable has the same value on each server.
+ *
+ * For enhanced security, you may set this variable to the contents of a file
+ * outside your document root; you should also ensure that this file is not
+ * stored with backups of your database.
+ *
+ * Example:
+ * @code
+ *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
+ * @endcode
  */
-$settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd2LqxIII5mh9j0tJTn-E9qrUqIL5ETDA';
+$settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd3LqxIII5mh9j0tJTn-E9qrUqIL5ETDA';
 
 /**
  * Save emails to file
@@ -199,11 +210,31 @@ $settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd2LqxIII5mh9
  *
  * https://www.drupal.org/docs/8/configuration-management/changing-the-storage-location-of-the-sync-directory
  */
-# Inside Drupal
-# $config_directories[CONFIG_SYNC_DIRECTORY] = 'sites/default/files/sync';
-# Outside Drupal
-# $config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
+$settings['config_sync_directory'] = 'sites/default/files/sync';
 
+/**
+ * Exclude modules from configuration synchronization.
+ *
+ * On config export sync, no config or dependent config of any excluded module
+ * is exported. On config import sync, any config of any installed excluded
+ * module is ignored. In the exported configuration, it will be as if the
+ * excluded module had never been installed. When syncing configuration, if an
+ * excluded module is already installed, it will not be uninstalled by the
+ * configuration synchronization, and dependent configuration will remain
+ * intact. This affects only configuration synchronization; single import and
+ * export of configuration are not affected.
+ *
+ * Drupal does not validate or sanity check the list of excluded modules. For
+ * instance, it is your own responsibility to never exclude required modules,
+ * because it would mean that the exported configuration can not be imported
+ * anymore.
+ *
+ * This is an advanced feature and using it means opting out of some of the
+ * guarantees the configuration synchronization provides. It is not recommended
+ * to use this feature with modules that affect Drupal in a major way such as
+ * the language or field module.
+ */
+# $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
 
 /**
  * Database settings - Edit these as needed
@@ -224,9 +255,9 @@ $databases['default']['default'] = [
  */
 if (getenv('LANDO') == 'ON') {
   $databases['default']['default'] = [
-    'database' => 'drupal8',
-    'username' => 'drupal8',
-    'password' => 'drupal8',
+    'database' => 'drupal9',
+    'username' => 'drupal9',
+    'password' => 'drupal9',
     'prefix' => '',
     'host' => 'database',
     'port' => '3306',
