@@ -1,7 +1,32 @@
-name: # Put the custom name of your site here
+name: drupal
 recipe: drupal9
 config:
   webroot: web
+services:
+  appserver:
+    build:
+      - mkdir -p /app/web/sites/simpletest/browser_output
+    overrides:
+      environment:
+        # Support debugging Drush with Xdebug.
+        #PHP_IDE_CONFIG: "serverName=appserver"
+
+        # Allow XDebug with WSL2 on Windows.
+        #LANDO_HOST_IP: "host.docker.internal"
+        #XDEBUG_CONFIG: "remote_enable=1 remote_host=host.docker.internal"
+
+        # PhpUnit vars.
+        SIMPLETEST_BASE_URL: 'http://drupal.lndo.site'
+        SIMPLETEST_DB: 'mysql://drupal9:drupal9@database/drupal9'
+        MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", { "chromeOptions": { "args": [ "disable-gpu", "headless", "no-sandbox" ] } }, "http://chromedriver:9515"]'
+        BROWSERTEST_OUTPUT_DIRECTORY: /app/web/sites/simpletest/browser_output
+  chromedriver:
+    type: compose
+    services:
+      image: drupalci/webdriver-chromedriver:production
+      # This is the ENTRYPOINT + CMD from the Dockerfile. Empty whitelisted-ips
+      # param opens the chromedriver port for other hosts.
+      command: chromedriver --log-path=/tmp/chromedriver.log --verbose --whitelisted-ips=
 tooling:
   drupal-local-settings:
     service: appserver
@@ -18,7 +43,7 @@ tooling:
     description: Install Drupal
     cmd:
       - APP=$LANDO_APP_NAME && drush si standard --account-pass=admin --account-name=admin --site-name=$APP
-      - URI=http://$LANDO_APP_NAME.$LANDO_DOMAIN && drush uli --uri=$URI
+      - drush uli --uri=http://drupal.lndo.site
   xdebug-on:
     service: appserver
     description: Enable xdebug for apache.
@@ -29,7 +54,11 @@ tooling:
     description: Disable xdebug for apache.
     cmd: "rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload"
     user: root
+  phpunit:
+    service: appserver
+    description: Run PHPUnit tests including browser and javascript tests
+    cmd: "/app/vendor/bin/phpunit -c /app/core/phpunit.xml.dist"
   # Ensure that drush uses the domain name and drupal root directory.
   drush:
     service: appserver
-    cmd: URI=http://$LANDO_APP_NAME.$LANDO_DOMAIN && drush --root=$LANDO_WEBROOT --uri=$URI
+    cmd: drush --root=/app/web --uri=http://drupal.lndo.site
