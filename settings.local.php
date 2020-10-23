@@ -210,7 +210,7 @@ $settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd3LqxIII5mh9
  *
  * https://www.drupal.org/docs/8/configuration-management/changing-the-storage-location-of-the-sync-directory
  */
-$settings['config_sync_directory'] = 'sites/default/files/sync';
+# $settings['config_sync_directory'] = 'sites/default/files/sync';
 
 /**
  * Exclude modules from configuration synchronization.
