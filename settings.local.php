@@ -234,7 +234,7 @@ $settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd3LqxIII5mh9
  * to use this feature with modules that affect Drupal in a major way such as
  * the language or field module.
  */
-# $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
+#$settings['config_exclude_modules'] = ['devel', 'webprofiler', 'stage_file_proxy'];
 
 /**
  * Database settings - Edit these as needed

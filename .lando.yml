@@ -2,18 +2,20 @@ name: drupal
 recipe: drupal9
 config:
   webroot: web
+  xdebug: false
+  config:
+    php: .vscode/php.ini
 services:
   appserver:
     build:
       - mkdir -p /app/web/sites/simpletest/browser_output
     overrides:
       environment:
+        # Allow XDebug to be toggled.
+        XDEBUG_MODE:
+
         # Support debugging Drush with Xdebug.
         #PHP_IDE_CONFIG: "serverName=appserver"
-
-        # Allow XDebug with WSL2 on Windows.
-        #LANDO_HOST_IP: "host.docker.internal"
-        #XDEBUG_CONFIG: "remote_enable=1 remote_host=host.docker.internal"
 
         # PhpUnit vars.
         SIMPLETEST_BASE_URL: 'http://drupal.lndo.site'
@@ -58,6 +60,9 @@ tooling:
     service: appserver
     description: Run PHPUnit tests including browser and javascript tests
     cmd: "/app/vendor/bin/phpunit -c /app/core/phpunit.xml.dist"
+  phpunit-debug:
+    service: appserver
+    cmd: php -d xdebug.remote_port=9003 vendor/bin/phpunit
   # Ensure that drush uses the domain name and drupal root directory.
   drush:
     service: appserver
