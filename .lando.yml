@@ -13,6 +13,8 @@ services:
       environment:
         # Allow XDebug to be toggled.
         XDEBUG_MODE:
+          # Needed by PhpStorm
+        XDEBUG_CONFIG: client_host=host.docker.internal
 
         # Support debugging Drush with Xdebug.
         #PHP_IDE_CONFIG: "serverName=appserver"
