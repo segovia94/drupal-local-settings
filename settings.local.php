@@ -246,8 +246,10 @@ $databases['default']['default'] = [
   'prefix' => '',
   'host' => 'localhost',
   'port' => '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'isolation_level' => 'READ COMMITTED',
   'driver' => 'mysql',
+  'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
+  'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 ];
 
 /**
@@ -255,13 +257,16 @@ $databases['default']['default'] = [
  */
 if (getenv('LANDO') == 'ON') {
   $databases['default']['default'] = [
-    'database' => 'drupal9',
-    'username' => 'drupal9',
-    'password' => 'drupal9',
+    'database' => 'drupal10',
+    'username' => 'drupal10',
+    'password' => 'drupal10',
     'prefix' => '',
     'host' => 'database',
-    'port' => '3306',
-    'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+    'isolation_level' => 'READ COMMITTED',
     'driver' => 'mysql',
+    'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
+    'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
   ];
 }
+
+$settings['config_sync_directory'] = 'sites/default/files/config_gN1uLAI5bOTciSINv-iqJLIBOLnhoSpHd1eml7FnkZBjY_8W46_J8fYXfeR6_JIe6FpmtHLsZA/sync';
