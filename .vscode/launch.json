@@ -8,6 +8,7 @@
       "name": "Listen for XDebug",
       "type": "php",
       "request": "launch",
+      // https://gist.github.com/quentint/57f9144459598b66cf9d59c681361c03?permalink_comment_id=4346709#gistcomment-4346709
       "port": 9003,
       // hostname is needed if using WSL2
       "hostname": "0.0.0.0",
