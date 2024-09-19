@@ -1,5 +1,5 @@
 name: drupal
-recipe: drupal9
+recipe: drupal11
 config:
   webroot: web
   xdebug: false
@@ -21,7 +21,7 @@ services:
 
         # PhpUnit vars.
         SIMPLETEST_BASE_URL: 'http://drupal.lndo.site'
-        SIMPLETEST_DB: 'mysql://drupal9:drupal9@database/drupal9'
+        SIMPLETEST_DB: 'mysql://drupal11:drupal11@database/drupal11'
         MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", { "chromeOptions": { "args": [ "disable-gpu", "headless", "no-sandbox" ] } }, "http://chromedriver:9515"]'
         BROWSERTEST_OUTPUT_DIRECTORY: /app/web/sites/simpletest/browser_output
   chromedriver:
@@ -32,6 +32,12 @@ services:
       # param opens the chromedriver port for other hosts.
       command: chromedriver --log-path=/tmp/chromedriver.log --verbose --whitelisted-ips=
 tooling:
+  drupal-download:
+    service: appserver
+    description: Download Drupal via Composer.
+    cmd:
+      - composer create-project drupal/recommended-project:11.0.0 tmp && cp -r tmp/. . && rm -rf tmp
+      - composer require drush/drush
   drupal-local-settings:
     service: appserver
     description: Setup Drupal with local config.

@@ -1,6 +1,6 @@
 <?php
 
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 /**
  * @file
@@ -26,14 +26,10 @@
  * @see http://php.net/assert
  * @see https://www.drupal.org/node/2492225
  *
- * If you are using PHP 7.0 it is strongly recommended that you set
- * zend.assertions=1 in the PHP.ini file (It cannot be changed from .htaccess
- * or runtime) on development machines and to 0 in production.
- *
- * @see https://wiki.php.net/rfc/expectations
+ * It is strongly recommended that you set zend.assertions=1 in the PHP.ini file
+ * (It cannot be changed from .htaccess or runtime) on development machines and
+ * to 0 or -1 in production.
  */
-assert_options(ASSERT_ACTIVE, TRUE);
-\Drupal\Component\Assertion\Handle::register();
 
 /**
  * Enable local development services.
@@ -131,6 +127,30 @@ $settings['rebuild_access'] = TRUE;
 $settings['skip_permissions_hardening'] = TRUE;
 
 /**
+ * Exclude modules from configuration synchronization.
+ *
+ * On config export sync, no config or dependent config of any excluded module
+ * is exported. On config import sync, any config of any installed excluded
+ * module is ignored. In the exported configuration, it will be as if the
+ * excluded module had never been installed. When syncing configuration, if an
+ * excluded module is already installed, it will not be uninstalled by the
+ * configuration synchronization, and dependent configuration will remain
+ * intact. This affects only configuration synchronization; single import and
+ * export of configuration are not affected.
+ *
+ * Drupal does not validate or sanity check the list of excluded modules. For
+ * instance, it is your own responsibility to never exclude required modules,
+ * because it would mean that the exported configuration can not be imported
+ * anymore.
+ *
+ * This is an advanced feature and using it means opting out of some of the
+ * guarantees the configuration synchronization provides. It is not recommended
+ * to use this feature with modules that affect Drupal in a major way such as
+ * the language or field module.
+ */
+# $settings['config_exclude_modules'] = ['devel', 'webprofiler', 'stage_file_proxy'];
+
+/**
  * Trusted host configuration.
  *
  * Drupal core can use the Symfony trusted host mechanism to prevent HTTP Host
@@ -143,9 +163,9 @@ $settings['skip_permissions_hardening'] = TRUE;
  *
  * For example:
  * @code
- * $settings['trusted_host_patterns'] = array(
+ * $settings['trusted_host_patterns'] = [
  *   '^www\.example\.com$',
- * );
+ * ];
  * @endcode
  * will allow the site to only run from www.example.com.
  *
@@ -156,20 +176,23 @@ $settings['skip_permissions_hardening'] = TRUE;
  *
  * For example:
  * @code
- * $settings['trusted_host_patterns'] = array(
+ * $settings['trusted_host_patterns'] = [
  *   '^example\.com$',
  *   '^.+\.example\.com$',
  *   '^example\.org$',
  *   '^.+\.example\.org$',
- * );
+ * ];
  * @endcode
  * will allow the site to run off of all variants of example.com and
  * example.org, with all subdomains included.
+ *
+ * @see https://www.drupal.org/docs/installing-drupal/trusted-host-settings
  */
  $settings['trusted_host_patterns'] = [
   '.*',
   '^lndo\.site$',
   '^.+\.lndo\.site$',
+  '^.+\.docksal\.site$',
  ];
 
 /**
@@ -181,7 +204,8 @@ $settings['skip_permissions_hardening'] = TRUE;
  * variable has the same value on each server.
  *
  * For enhanced security, you may set this variable to the contents of a file
- * outside your document root; you should also ensure that this file is not
+ * outside your document root, and vary the value across environments (like
+ * production and development); you should also ensure that this file is not
  * stored with backups of your database.
  *
  * Example:
@@ -207,34 +231,8 @@ $settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd3LqxIII5mh9
  * The default location for this directory is inside a randomly-named
  * directory in the public files path. The setting below allows you to set
  * its location.
- *
- * https://www.drupal.org/docs/8/configuration-management/changing-the-storage-location-of-the-sync-directory
  */
 # $settings['config_sync_directory'] = 'sites/default/files/sync';
-
-/**
- * Exclude modules from configuration synchronization.
- *
- * On config export sync, no config or dependent config of any excluded module
- * is exported. On config import sync, any config of any installed excluded
- * module is ignored. In the exported configuration, it will be as if the
- * excluded module had never been installed. When syncing configuration, if an
- * excluded module is already installed, it will not be uninstalled by the
- * configuration synchronization, and dependent configuration will remain
- * intact. This affects only configuration synchronization; single import and
- * export of configuration are not affected.
- *
- * Drupal does not validate or sanity check the list of excluded modules. For
- * instance, it is your own responsibility to never exclude required modules,
- * because it would mean that the exported configuration can not be imported
- * anymore.
- *
- * This is an advanced feature and using it means opting out of some of the
- * guarantees the configuration synchronization provides. It is not recommended
- * to use this feature with modules that affect Drupal in a major way such as
- * the language or field module.
- */
-#$settings['config_exclude_modules'] = ['devel', 'webprofiler', 'stage_file_proxy'];
 
 /**
  * Database settings - Edit these as needed
@@ -255,9 +253,9 @@ $databases['default']['default'] = [
  */
 if (getenv('LANDO') == 'ON') {
   $databases['default']['default'] = [
-    'database' => 'drupal9',
-    'username' => 'drupal9',
-    'password' => 'drupal9',
+    'database' => 'drupal11',
+    'username' => 'drupal11',
+    'password' => 'drupal11',
     'prefix' => '',
     'host' => 'database',
     'port' => '3306',
