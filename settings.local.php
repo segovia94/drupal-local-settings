@@ -238,11 +238,10 @@ $settings['hash_salt'] = 'S8hk3uuCAW46j8VxXtM_J6NAmKT7Vb9gXzyDRoncKgd3LqxIII5mh9
  * Database settings - Edit these as needed
  */
 $databases['default']['default'] = [
-  'database' => 'database_name_goes_here',
-  'username' => 'root',
-  'password' => 'root',
-  'prefix' => '',
-  'host' => 'localhost',
+  'database' => getenv('MYSQL_DATABASE'),
+  'username' => getenv('MYSQL_USER'),
+  'password' => getenv('MYSQL_PASSWORD'),
+  'host' => getenv('MYSQL_HOST'),
   'port' => '3306',
   'isolation_level' => 'READ COMMITTED',
   'driver' => 'mysql',
@@ -264,6 +263,20 @@ if (getenv('LANDO') == 'ON') {
     'driver' => 'mysql',
     'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
     'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
+  ];
+}
+
+/**
+ * Docksal Database settings - If *.docksal.site/ is being used.
+ */
+if (strpos(getenv('SERVER_NAME'), 'docksal') !== false) {
+  $databases['default']['default'] = [
+    'database' => 'default',
+    'username' => 'user',
+    'password' => 'user',
+    'host' => 'db',
+    'port' => '3306',
+    'driver' => 'mysql',
   ];
 }
 
